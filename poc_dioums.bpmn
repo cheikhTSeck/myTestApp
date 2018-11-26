@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.0">
+  <bpmn:process id="poc_Dioums" name="POC pour Aldiouma" isExecutable="true" camunda:versionTag="1.0">
+    <bpmn:documentation><![CDATA[User -> Assignee/Directeur -> End]]></bpmn:documentation>
+    <bpmn:startEvent id="StartEvent_1" name="Début">
+      <bpmn:outgoing>SequenceFlow_1rb8flw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1rb8flw" sourceRef="StartEvent_1" targetRef="Task_139u7xg" />
+    <bpmn:sequenceFlow id="SequenceFlow_0ir5trc" sourceRef="Task_139u7xg" targetRef="Task_0aryjqw" />
+    <bpmn:sequenceFlow id="SequenceFlow_06usvgp" sourceRef="Task_0aryjqw" targetRef="Task_1mycm4s" />
+    <bpmn:sequenceFlow id="SequenceFlow_05nibih" sourceRef="Task_1mycm4s" targetRef="Task_1qbmfcc" />
+    <bpmn:endEvent id="EndEvent_1kgx51u">
+      <bpmn:incoming>SequenceFlow_02uqyoc</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_02uqyoc" sourceRef="Task_1qbmfcc" targetRef="EndEvent_1kgx51u" />
+    <bpmn:userTask id="Task_139u7xg" name="Initiation de la tâche" camunda:assignee="${initiator}">
+      <bpmn:incoming>SequenceFlow_1rb8flw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0ir5trc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:scriptTask id="Task_0aryjqw" name="injection de variable" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0ir5trc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_06usvgp</bpmn:outgoing>
+      <bpmn:script><![CDATA[execution.setVariableLocal("commentOnly", true)]]></bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:serviceTask id="Task_1mycm4s" name="Récupération du validateur" camunda:expression="${workflowService.getHierarchicalSuperior(initiator, projetId)}" camunda:resultVariable="superieur">
+      <bpmn:incoming>SequenceFlow_06usvgp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_05nibih</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_1qbmfcc" name="Traitement N+1" camunda:assignee="${superieur}">
+      <bpmn:incoming>SequenceFlow_05nibih</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_02uqyoc</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="poc_Dioums">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="170" y="179" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="174" y="215" width="30" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1rb8flw_di" bpmnElement="SequenceFlow_1rb8flw">
+        <di:waypoint xsi:type="dc:Point" x="206" y="197" />
+        <di:waypoint xsi:type="dc:Point" x="266" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="236" y="175.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ir5trc_di" bpmnElement="SequenceFlow_0ir5trc">
+        <di:waypoint xsi:type="dc:Point" x="366" y="197" />
+        <di:waypoint xsi:type="dc:Point" x="421" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="393.5" y="175.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_06usvgp_di" bpmnElement="SequenceFlow_06usvgp">
+        <di:waypoint xsi:type="dc:Point" x="521" y="197" />
+        <di:waypoint xsi:type="dc:Point" x="570" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="545.5" y="175.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_05nibih_di" bpmnElement="SequenceFlow_05nibih">
+        <di:waypoint xsi:type="dc:Point" x="670" y="197" />
+        <di:waypoint xsi:type="dc:Point" x="724" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="697" y="175.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1kgx51u_di" bpmnElement="EndEvent_1kgx51u">
+        <dc:Bounds x="876" y="179" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="894" y="218" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_02uqyoc_di" bpmnElement="SequenceFlow_02uqyoc">
+        <di:waypoint xsi:type="dc:Point" x="824" y="197" />
+        <di:waypoint xsi:type="dc:Point" x="876" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="850" y="175.5" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1autl0g_di" bpmnElement="Task_139u7xg">
+        <dc:Bounds x="266" y="157" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ScriptTask_01ijz23_di" bpmnElement="Task_0aryjqw">
+        <dc:Bounds x="421" y="157" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_13kqmfm_di" bpmnElement="Task_1mycm4s">
+        <dc:Bounds x="570" y="157" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_10dl3kl_di" bpmnElement="Task_1qbmfcc">
+        <dc:Bounds x="724" y="157" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
